@@ -1,0 +1,2 @@
+azure-identity==1.25.3
+azure-storage-file-datalake==12.25.0

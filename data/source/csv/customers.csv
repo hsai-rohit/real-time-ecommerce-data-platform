@@ -1,0 +1,21 @@
+customer_id,first_name,last_name,email,country,signup_date
+CUS-001,Avery,Stone,avery.stone@example.test,United States,2025-01-12
+CUS-002,Jordan,Reed,jordan.reed@example.test,United Kingdom,2025-01-23
+CUS-003,Casey,Mills,casey.mills@example.test,Canada,2025-02-03
+CUS-004,Riley,Hart,riley.hart@example.test,Australia,2025-02-14
+CUS-005,Morgan,Blake,morgan.blake@example.test,India,2025-02-25
+CUS-006,Taylor,Quinn,taylor.quinn@example.test,United States,2025-03-08
+CUS-007,Cameron,Vale,cameron.vale@example.test,United Kingdom,2025-03-19
+CUS-008,Parker,Sloan,parker.sloan@example.test,Canada,2025-03-30
+CUS-009,Drew,Lane,drew.lane@example.test,Australia,2025-04-10
+CUS-010,Hayden,Brooks,hayden.brooks@example.test,India,2025-04-21
+CUS-011,Rowan,Cole,rowan.cole@example.test,United States,2025-05-02
+CUS-012,Skyler,Nash,skyler.nash@example.test,United Kingdom,2025-05-13
+CUS-013,Reese,Ford,reese.ford@example.test,Canada,2025-05-24
+CUS-014,Emerson,Wells,emerson.wells@example.test,Australia,2025-06-04
+CUS-015,Logan,Pierce,logan.pierce@example.test,India,2025-06-15
+CUS-016,Sydney,Rowe,sydney.rowe@example.test,United States,2025-06-26
+CUS-017,Bailey,Cruz,bailey.cruz@example.test,United Kingdom,2025-07-07
+CUS-018,Kendall,Shaw,kendall.shaw@example.test,Canada,2025-07-18
+CUS-019,Marley,Voss,marley.voss@example.test,Australia,2025-07-29
+CUS-020,Alex,Winter,alex.winter@example.test,India,2025-08-09

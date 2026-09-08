@@ -1,0 +1,16 @@
+product_id,product_name,category,price,currency,stock_quantity
+PRD-001,Wireless Keyboard,Electronics,49.99,USD,82
+PRD-002,Ceramic Travel Mug,Home,18.50,USD,120
+PRD-003,Linen Notebook,Stationery,12.75,USD,200
+PRD-004,USB-C Hub,Electronics,34.00,USD,65
+PRD-005,Cotton Throw,Home,42.25,USD,47
+PRD-006,Desk Lamp,Home,39.95,USD,58
+PRD-007,Canvas Tote,Accessories,16.00,USD,150
+PRD-008,Insulated Bottle,Outdoors,27.50,USD,93
+PRD-009,Mechanical Pencil,Stationery,9.99,USD,300
+PRD-010,Laptop Stand,Electronics,44.75,USD,72
+PRD-011,Yoga Mat,Fitness,31.20,USD,84
+PRD-012,Packing Cubes,Travel,24.60,USD,110
+PRD-013,Bluetooth Speaker,Electronics,55.00,USD,39
+PRD-014,Apron,Home,22.40,USD,95
+PRD-015,Resistance Bands,Fitness,14.80,USD,180

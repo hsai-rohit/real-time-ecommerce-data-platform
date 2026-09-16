@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import os
 import sys
 from pathlib import Path
 
@@ -32,16 +33,25 @@ def main() -> int:
 
         logger.info("START SQLITE INGESTION")
         for table in ("orders", "payments"):
-            ingest_table(sqlite_source, table, raw_root / "sqlite" / f"{table}.csv")
+            ingest_table(
+                sqlite_source,
+                table,
+                raw_root / "sqlite" / f"{table}.csv",
+            )
         logger.info("COMPLETE SQLITE INGESTION")
 
         logger.info("START API INGESTION")
         ingest_api(
-            "http://127.0.0.1:8000/events",
+            os.getenv("API_URL", "http://127.0.0.1:8000/events"),
             raw_root / "api" / "events.json",
         )
         logger.info("COMPLETE API INGESTION")
-    except (CsvIngestionError, SQLiteIngestionError, APIIngestionError) as error:
+
+    except (
+        CsvIngestionError,
+        SQLiteIngestionError,
+        APIIngestionError,
+    ) as error:
         logger.error("INGESTION FAILED: %s", error)
         return 1
 

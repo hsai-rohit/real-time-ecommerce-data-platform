@@ -20,6 +20,8 @@ logs/
 # Generated data
 data/raw/
 data/processed/
+data/staging/
+data/exports/
 
 # Databricks / Spark
 .sparkStaging/

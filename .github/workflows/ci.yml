@@ -8,6 +8,10 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   test-and-build:
     runs-on: ubuntu-latest
@@ -28,4 +32,22 @@ jobs:
         run: python -m pytest -v
 
       - name: Build Docker image
-        run: docker build -t ecommerce-ingestion:ci .
+        run: |
+          docker build \
+            -t ghcr.io/hsai-rohit/ecommerce-ingestion:${{ github.sha }} \
+            -t ghcr.io/hsai-rohit/ecommerce-ingestion:latest \
+            .
+
+      - name: Log in to GitHub Container Registry
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | \
+            docker login ghcr.io \
+            -u "${{ github.actor }}" \
+            --password-stdin
+
+      - name: Push Docker image
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          docker push ghcr.io/hsai-rohit/ecommerce-ingestion:${{ github.sha }}
+          docker push ghcr.io/hsai-rohit/ecommerce-ingestion:latest

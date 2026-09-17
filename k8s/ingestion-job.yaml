@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ecommerce-ingestion
+  namespace: ecommerce
+spec:
+  backoffLimit: 2
+  template:
+    metadata:
+      labels:
+        app: ecommerce-ingestion
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: ingestion
+          image: ghcr.io/hsai-rohit/ecommerce-ingestion:latest
+          imagePullPolicy: Always
+          env:
+            - name: API_URL
+              value: "http://172.18.0.1:8000/events"
+          volumeMounts:
+            - name: source-data
+              mountPath: /app/data/source
+              readOnly: true
+      volumes:
+        - name: source-data
+          hostPath:
+            path: /data/source
+            type: Directory

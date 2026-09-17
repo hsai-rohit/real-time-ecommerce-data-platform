@@ -17,7 +17,7 @@ spec:
           imagePullPolicy: Always
           env:
             - name: API_URL
-              value: "http://172.18.0.1:8000/events"
+              value: "http://mock-events-api:8000/events"
           volumeMounts:
             - name: source-data
               mountPath: /app/data/source

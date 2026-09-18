@@ -1,0 +1,13 @@
+namespace: ecommerce
+
+image:
+  repository: ghcr.io/hsai-rohit/ecommerce-ingestion
+  tag: latest
+  pullPolicy: Always
+
+api:
+  replicas: 1
+  port: 8000
+
+ingestion:
+  apiUrl: http://mock-events-api:8000/events

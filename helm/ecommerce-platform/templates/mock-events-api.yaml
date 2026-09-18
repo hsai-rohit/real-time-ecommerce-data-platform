@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mock-events-api
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.api.replicas }}
+  selector:
+    matchLabels:
+      app: mock-events-api
+  template:
+    metadata:
+      labels:
+        app: mock-events-api
+    spec:
+      containers:
+        - name: mock-events-api
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - python
+            - scripts/mock_events_api.py
+            - --host
+            - 0.0.0.0
+            - --port
+            - "{{ .Values.api.port }}"
+          ports:
+            - containerPort: {{ .Values.api.port }}
+              protocol: TCP
+          volumeMounts:
+            - name: source-data
+              mountPath: /app/data/source
+              readOnly: true
+      volumes:
+        - name: source-data
+          hostPath:
+            path: /data/source
+            type: Directory
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mock-events-api
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    app: mock-events-api
+  ports:
+    - protocol: TCP
+      port: {{ .Values.api.port }}
+      targetPort: {{ .Values.api.port }}
+  type: ClusterIP

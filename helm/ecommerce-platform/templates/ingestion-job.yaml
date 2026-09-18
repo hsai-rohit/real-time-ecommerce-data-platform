@@ -1,0 +1,56 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ecommerce-ingestion
+  namespace: {{ .Values.namespace }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  backoffLimit: 2
+  template:
+    metadata:
+      labels:
+        app: ecommerce-ingestion
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: ingestion
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: API_URL
+              value: "{{ .Values.ingestion.apiUrl }}"
+          command:
+            - python
+            - -c
+            - |
+              import os
+              import time
+              import urllib.request
+
+              url = os.environ["API_URL"]
+
+              for attempt in range(30):
+                  try:
+                      with urllib.request.urlopen(url, timeout=2) as response:
+                          if response.status == 200:
+                              print(f"API ready: {url}")
+                              break
+                  except Exception as exc:
+                      print(f"Waiting for API ({attempt + 1}/30): {exc}")
+                  time.sleep(2)
+              else:
+                  raise SystemExit(f"API did not become ready: {url}")
+
+              import runpy
+              runpy.run_path("scripts/run_ingestion.py", run_name="__main__")
+          volumeMounts:
+            - name: source-data
+              mountPath: /app/data/source
+              readOnly: true
+      volumes:
+        - name: source-data
+          hostPath:
+            path: /data/source
+            type: Directory

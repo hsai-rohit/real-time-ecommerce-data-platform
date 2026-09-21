@@ -24,6 +24,11 @@ class EventsHandler(BaseHTTPRequestHandler):
 
     def do_GET(self) -> None:  # noqa: N802 - HTTP method name required by stdlib
         request = urlsplit(self.path)
+
+        if request.path == "/health":
+            self.send_json(HTTPStatus.OK, {"status": "ok"})
+            return
+
         if request.path != "/events":
             self.send_json(HTTPStatus.NOT_FOUND, {"error": "Endpoint not found"})
             return
@@ -33,25 +38,36 @@ class EventsHandler(BaseHTTPRequestHandler):
         if len(limits) > 1:
             self.send_json(HTTPStatus.BAD_REQUEST, {"error": "limit must be supplied once"})
             return
+
         try:
             limit = int(limits[0]) if limits else None
             if limit is not None and limit < 0:
                 raise ValueError
         except ValueError:
-            self.send_json(HTTPStatus.BAD_REQUEST, {"error": "limit must be a non-negative integer"})
+            self.send_json(
+                HTTPStatus.BAD_REQUEST,
+                {"error": "limit must be a non-negative integer"},
+            )
             return
 
         try:
             with EVENTS_PATH.open(encoding="utf-8") as handle:
                 events = json.load(handle)
         except (FileNotFoundError, json.JSONDecodeError):
-            self.send_json(HTTPStatus.INTERNAL_SERVER_ERROR, {"error": "Event source is unavailable"})
+            self.send_json(
+                HTTPStatus.INTERNAL_SERVER_ERROR,
+                {"error": "Event source is unavailable"},
+            )
             return
 
         selected_events = events if limit is None else events[:limit]
         self.send_json(
             HTTPStatus.OK,
-            {"events": selected_events, "count": len(selected_events), "total": len(events)},
+            {
+                "events": selected_events,
+                "count": len(selected_events),
+                "total": len(events),
+            },
         )
 
     def log_message(self, format: str, *args: object) -> None:
@@ -60,8 +76,17 @@ class EventsHandler(BaseHTTPRequestHandler):
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run the local synthetic events API.")
-    parser.add_argument("--host", default="127.0.0.1", help="Local bind address (default: 127.0.0.1)")
-    parser.add_argument("--port", default=8000, type=int, help="Local port (default: 8000)")
+    parser.add_argument(
+        "--host",
+        default="127.0.0.1",
+        help="Local bind address (default: 127.0.0.1)",
+    )
+    parser.add_argument(
+        "--port",
+        default=8000,
+        type=int,
+        help="Local port (default: 8000)",
+    )
     args = parser.parse_args()
 
     server = ThreadingHTTPServer((args.host, args.port), EventsHandler)

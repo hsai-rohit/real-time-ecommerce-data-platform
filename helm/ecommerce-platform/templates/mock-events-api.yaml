@@ -27,10 +27,26 @@ spec:
           ports:
             - containerPort: {{ .Values.api.port }}
               protocol: TCP
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.api.port }}
+            initialDelaySeconds: 2
+            periodSeconds: 5
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.api.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+
           volumeMounts:
             - name: source-data
               mountPath: /app/data/source
               readOnly: true
+
       volumes:
         - name: source-data
           hostPath:

@@ -1,9 +1,9 @@
 namespace: ecommerce
 
 image:
-  repository: ghcr.io/hsai-rohit/ecommerce-ingestion
-  tag: latest
-  pullPolicy: Always
+  repository: ecommerce-ingestion
+  tag: "0.3"
+  pullPolicy: IfNotPresent
 
 api:
   replicas: 1
